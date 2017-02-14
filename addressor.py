@@ -38,7 +38,8 @@ def extract_target(items):
     return [tar for (tar, _) in items]
 
 def generate_pipe():
-    addresses       = get_short_stories()
+    addresses       = get_addresses()
+    not_addresses   = get_short_stories()
     combined        = combine_and_shuffle(addresses, not_addresses)
     data            = extract_data(combined)
     target          = extract_target(combined)
