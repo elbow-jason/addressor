@@ -12,7 +12,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.linear_model import SGDClassifier
 from sklearn.feature_extraction.text import (CountVectorizer, TfidfTransformer)
 
-CATEGORIES = ["address", "not_address"]
+CATEGORIES = ["address", "nothing"]
 
 def open_data_type(name, category):
     with open(name) as f:
