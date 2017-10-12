@@ -1,0 +1,5 @@
+
+TERMS = [
+    "GRANTEE",
+    "GRANTEE(S)",
+]
