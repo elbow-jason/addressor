@@ -3,12 +3,14 @@ from faker import Faker
 import random
 
 from piper.utils import open_data_type, tag_category, get_lines
-from piper.categories import ORGANIZATION
+from piper.categories import ORGANIZATION, LABELS
 from piper import utils
 from piper.predictor import generate_pipe
 from piper.preprocessing import word_tokenize
 
 producer = Faker()
+
+LABEL = LABELS[ORGANIZATION]
 
 TERMS = [
     "Title Insurance Company"
@@ -62,3 +64,20 @@ def get_categorized():
 
 def get_pipe():
     return generate_pipe(get_categorized())
+
+pipe = get_pipe()
+
+def extract(line):
+    if isinstance(line, str):
+        tokens = word_tokenize(line)
+        return tokens
+    if isinstance(line, list):
+        return [extract(l) for l in line]
+
+
+def filter_categorized(texts):
+    kept = []
+    for text in texts:
+        if isinstance(text, tuple) and text[1] in [ORGANIZATION, LABEL]:
+            kept.append(text[0])
+    return kept

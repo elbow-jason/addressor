@@ -39,7 +39,7 @@ ADDRESS_LABELS = {
     'StreetNamePostType',
     'PlaceName',
     'StateName',
-    'ZipCode',
+    # 'ZipCode',
 }
 
 def extract(line):
@@ -47,15 +47,29 @@ def extract(line):
     parts = usaddress.parse(line)
     kept = []
     for (item, label) in parts:
-        if label == 'AddressNumber':
+        if label in ADDRESS_LABELS:
             started = True
-        if label == "ZipCode":
+        if label == "ZipCode" and len(item) == 5:
             # done
             kept.append(item)
             return " ".join(kept)
         if started:
             kept.append(item)
-    return " ".join(kept)
+    return ""
+
+def deduplicate_substrings(strings):
+    deduped = []
+    for string in strings:
+        if not string in deduped:
+            deduped.append(string)
+    sorted_strings = sorted(deduped, key=lambda item: 0-len(item))
+    keepers = sorted_strings[:1]
+    for string in sorted_strings[1:]:
+        print("string:", string, "keepers:", keepers)
+        for keeper in keepers:
+            if string not in keeper:
+                keepers.append(string)
+    return keepers
 
 # BELOW ARE THE NEW PARTS
 

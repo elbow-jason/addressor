@@ -11,6 +11,7 @@ SYMBOLS = {
     "`",
     "\'",
     "‘",
+    "`",
 }
 
 
@@ -51,3 +52,15 @@ def to_lines(text):
         if len(line) > 0:
             lines.append(line)
     return lines
+
+
+def to_word_chunks(text, size=14):
+    tokens = word_tokenize(text)
+    upper_limit = len(tokens) - size
+    if upper_limit <= 0:
+        return [" ".join(tokens)]
+    chunked = []
+    for i in range(upper_limit):
+        chunked.append(" ".join(tokens[i:i+size]))
+    return chunked
+    

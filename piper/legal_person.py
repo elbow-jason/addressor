@@ -3,8 +3,10 @@ PREFIXES = [
     "Name:",
     "personally appeared",
     "hereby convey to",
-    "NAME:",
+    "Legal Counsel of ",
+    "valuable considerations I or we"
 ]
+
 SUFFIXES = [
     "an unmarried man",
     "an unmarried woman",
