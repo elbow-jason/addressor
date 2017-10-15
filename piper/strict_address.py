@@ -57,19 +57,18 @@ def extract(line):
             kept.append(item)
     return ""
 
-def deduplicate_substrings(strings):
-    deduped = []
-    for string in strings:
-        if not string in deduped:
-            deduped.append(string)
-    sorted_strings = sorted(deduped, key=lambda item: 0-len(item))
-    keepers = sorted_strings[:1]
-    for string in sorted_strings[1:]:
-        print("string:", string, "keepers:", keepers)
-        for keeper in keepers:
-            if string not in keeper:
-                keepers.append(string)
-    return keepers
+# def deduplicate_substrings(strings):
+#     deduped = []
+#     for string in strings:
+#         if not string in deduped:
+#             deduped.append(string)
+#     sorted_strings = sorted(deduped, key=lambda item: 0-len(item))
+#     keepers = sorted_strings[:1]
+#     for string in sorted_strings[1:]:
+#         for keeper in keepers:
+#             if string not in keeper:
+#                 keepers.append(string)
+#     return keepers
 
 # BELOW ARE THE NEW PARTS
 

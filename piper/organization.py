@@ -34,6 +34,17 @@ TERMS = [
     "Corporation",
 ]
 
+STOP_WORDS = {
+    "personally",
+    "known",
+    "to",
+    "me",
+    "or",
+    "proved",
+    'an Arizona limited liability company'
+    
+}
+
 NUM_TERMS = len(TERMS)
 
 def random_organization():
@@ -44,7 +55,7 @@ def random_organization():
     ]
     return " ".join(parts)
 
-def new_list(limit=30000):
+def new_list(limit=1000):
     return [random_organization() for i in range(limit)]
 
 FILENAME = "./data/organizations.txt"
@@ -70,14 +81,14 @@ pipe = get_pipe()
 def extract(line):
     if isinstance(line, str):
         tokens = word_tokenize(line)
-        return tokens
+        tokens = [token for token in tokens if token.lower() not in STOP_WORDS]
+        
+        return " ".join(tokens)
     if isinstance(line, list):
         return [extract(l) for l in line]
 
+ALLOWED = [ORGANIZATION, LABEL]
 
 def filter_categorized(texts):
-    kept = []
-    for text in texts:
-        if isinstance(text, tuple) and text[1] in [ORGANIZATION, LABEL]:
-            kept.append(text[0])
-    return kept
+    return [text for text, cat in texts if cat in ALLOWED]
+

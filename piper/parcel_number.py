@@ -17,30 +17,39 @@ EXAMPLES = [
 
 LABEL = categories.LABELS[categories.PARCEL_NUMBER]
 
-APN_PATTERN = "a\.?p\.?n\.?\s?#?:?"
-KEY_PATTERN = "\d{3}-\d{2}-\d{3}"
-PARCEL_PATTERN = "(parcel\s+(no\.?|number|#):?)"
+APN_PATTERN = "(?P<apn>A\.?P\.?N\.?\s?#?:?)"
+KEY_PATTERN = "(?P<key>\d{3}-?\d{2}-?\d{3})"
+PARCEL_PATTERN = "(?P<parcel>(parcel\s+(no\.?|number|#):?))"
 
-KEY_REGEX = re.compile(KEY_PATTERN)
-APN_REGEX = re.compile(APN_PATTERN + "\s+" + KEY_PATTERN)
-PARCEL_NUM_REGEX = re.compile(PARCEL_PATTERN + "\s+" + KEY_PATTERN)
+KEY_REGEX = re.compile(KEY_PATTERN, re.IGNORECASE)
+APN_REGEX = re.compile(APN_PATTERN + "\s+" + KEY_PATTERN, re.IGNORECASE)
+PARCEL_NUM_REGEX = re.compile(PARCEL_PATTERN + "\s+" + KEY_PATTERN, re.IGNORECASE)
+
+def extract(text):
+    matched = APN_REGEX.search(text)
+    if matched:
+        return matched.group("key")
+    return None
 
 
-def findall(text):
-    lowered = text.lower()
-    found = []
-    found += APN_REGEX.findall(lowered)
-    found += PARCEL_NUM_REGEX.findall(lowered)
-    return found
+def extract(lines):
+    kept = []
+    for line in lines:
+        found = APN_REGEX.search(line)
+        if found:
+            kept.append(found.groupdict().get("key"))
+        found = PARCEL_NUM_REGEX.search(line)
+        if found:
+            kept.append(found.groupdict().get("key"))
+    return [reformat(x) for x in kept]
 
-def matches(text):
-    return len(findall(text)) > 0
-
-def extract(texts):
-    found = []
-    for text in texts:
-        found += KEY_REGEX.findall(text)
-    return found
+def reformat(apn):
+    apn = apn.replace("-", "")
+    return "-".join([
+        apn[:3],
+        apn[3:5],
+        apn[5:],
+    ])
 
 def filter_categorized(texts):
     kept = []
@@ -50,15 +59,15 @@ def filter_categorized(texts):
     return kept
 
 
-class ParcelNumberPipe(object):
-    def predict(self, texts):
-        categorized = []
-        for item in texts:
-            if matches(item):
-                categorized.append(categories.PARCEL_NUMBER)
-            else:
-                categorized.append(categories.NOTHING)
-        return categorized
+# class ParcelNumberPipe(object):
+#     def predict(self, texts):
+#         categorized = []
+#         for item in texts:
+#             if matches(item):
+#                 categorized.append(categories.PARCEL_NUMBER)
+#             else:
+#                 categorized.append(categories.NOTHING)
+#         return categorized
 
-def generate_pipe():
-    return ParcelNumberPipe()
+# def generate_pipe():
+#     return ParcelNumberPipe()

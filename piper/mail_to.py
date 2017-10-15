@@ -10,6 +10,7 @@ from piper.utils import tag_category
 
 PREFIXES = [
     "when recorded mail to:",
+    "after recording mail to:",
 ]
 
 SUFFIXES = [
@@ -24,6 +25,7 @@ UNWANTED_REGEXES = [
 ]
 
 KEY_PHRASE = "when recorded mail to:"
+OTHER_PHRASE = "after recording mail to:"
 
 LABEL = categories.LABELS[categories.MAIL_TO]
 
@@ -66,7 +68,7 @@ def keep_non_matching_regex(lines, regex):
     return [line for line in lines if not regex_matches(line, regex)]
 
 def matches_key_phrase(text):
-    return fuzzy_matches(KEY_PHRASE, text)
+    return fuzzy_matches(KEY_PHRASE, text) or fuzzy_matches(OTHER_PHRASE, text)
 
 def filter_categorized(texts):
     kept = []

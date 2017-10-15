@@ -6,6 +6,7 @@ PERSON_NAME = 3
 PARCEL_NUMBER = 4
 MAIL_TO = 5
 ORGANIZATION = 6
+LEGAL_PERSON = 7
 
 LABELS = [
     "nothing",
@@ -15,4 +16,5 @@ LABELS = [
     "parcel_number",
     "mail_to",
     "organization",
+    "legal_person",
 ]
